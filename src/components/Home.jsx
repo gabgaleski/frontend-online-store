@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories } from '../services/api';
+import QueryProduct from './QueryProduct';
 
 export default class Home extends Component {
   constructor() {
@@ -49,6 +50,9 @@ export default class Home extends Component {
           ))
         }
         <div />
+        <main>
+          <QueryProduct />
+        </main>
       </>
     );
   }

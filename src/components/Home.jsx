@@ -11,6 +11,7 @@ export default class Home extends Component {
 
     this.state = {
       categories: [],
+      fetchCategoriesData: [],
     };
   }
 
@@ -26,8 +27,23 @@ export default class Home extends Component {
     return categories;
   };
 
-  render() {
+  getCategoriesId = ({ target }) => {
     const { categories } = this.state;
+    const categoryId = categories.find((category) => target.id === category.id);
+    this.fetchCategoriesID(categoryId);
+  };
+
+  fetchCategoriesID = async (targetId) => {
+    const URL = (`https://api.mercadolibre.com/sites/MLB/search?category=${targetId.id}`);
+    const result = await fetch(URL);
+    const data = await result.json();
+    this.setState({
+      fetchCategoriesData: data.results,
+    });
+  };
+
+  render() {
+    const { categories, fetchCategoriesData } = this.state;
     return (
       <section>
         <Header />
@@ -37,7 +53,12 @@ export default class Home extends Component {
               categories.map((category) => (
                 <div key={ category.id }>
                   <label data-testid="category" htmlFor={ category.id }>
-                    <input type="radio" id={ category.id } />
+                    <input
+                      name="select-radio"
+                      type="radio"
+                      id={ category.id }
+                      onChange={ this.getCategoriesId }
+                    />
                     { category.name }
                   </label>
                 </div>
@@ -54,6 +75,14 @@ export default class Home extends Component {
             </div>
             <div />
             <QueryProduct />
+            { fetchCategoriesData.map((itemByCategory) => (
+              <p
+                data-testid="product"
+                key={ itemByCategory.id }
+              >
+                {itemByCategory.title}
+              </p>
+            )) }
           </main>
           <Link
             className="cart-btn"

@@ -42,6 +42,8 @@ export default class Home extends Component {
     });
   };
 
+  // modificação
+
   render() {
     const { categories, fetchCategoriesData } = this.state;
     return (

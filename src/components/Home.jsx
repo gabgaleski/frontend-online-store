@@ -76,14 +76,23 @@ export default class Home extends Component {
               </h1>
             </div>
             <div />
-            <QueryProduct />
+            <QueryProduct getProps={ this.props } />
             { fetchCategoriesData.map((itemByCategory) => (
-              <p
-                data-testid="product"
-                key={ itemByCategory.id }
-              >
-                {itemByCategory.title}
-              </p>
+              <div key={ itemByCategory.id }>
+                <Link
+                  data-testid="product-detail-link"
+                  to={ `/productdetails/${itemByCategory.id}` }
+                >
+                  Detail
+                </Link>
+                <p
+                  data-testid="product"
+                  key={ itemByCategory.id }
+                >
+                  {itemByCategory.title}
+                </p>
+
+              </div>
             )) }
           </main>
           <Link

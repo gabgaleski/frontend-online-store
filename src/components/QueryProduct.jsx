@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class QueryProduct extends React.Component {
@@ -50,7 +51,16 @@ class QueryProduct extends React.Component {
         {
           productsArray.length > 0
             ? productsArray.map((product) => (
-              <div data-testid="product" key={ product.id }>
+              <div
+                data-testid="product"
+                key={ product.id }
+              >
+                <Link
+                  data-testid="product-detail-link"
+                  to={ `/productdetails/${product.id}` }
+                >
+                  Detail
+                </Link>
                 <h1>{ product.title }</h1>
                 <img src={ product.thumbnail } alt={ product.title } />
                 <p>{ product.price }</p>

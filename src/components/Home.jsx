@@ -42,7 +42,7 @@ export default class Home extends Component {
     });
   };
 
-  // modificação
+  // modificação.
 
   render() {
     const { categories, fetchCategoriesData } = this.state;

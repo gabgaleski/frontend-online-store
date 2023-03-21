@@ -1,8 +1,8 @@
 .product-table {
   background-color: rgb(253, 237, 240);
   display: flex;
-  flex-direction: row;
   flex-flow: wrap;
+  flex-direction: row;
   justify-content: space-between;
   margin-top: 10px;
   width: 100%;

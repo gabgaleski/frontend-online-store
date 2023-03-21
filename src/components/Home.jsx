@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getCategories } from '../services/api';
 import QueryProduct from './QueryProduct';
 import '../styles/home.css';
 import Header from './Header';
+import ShoppingCart from './ShoppingCart';
 
 export default class Home extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      categories: [],
-      fetchCategoriesData: [],
-    };
-  }
+  state = {
+    categories: [],
+    fetchCategoriesData: [],
+    itemByCategoriesArray: [],
+  };
 
   async componentDidMount() {
     const result = await this.getApiCategory();
@@ -42,10 +41,22 @@ export default class Home extends Component {
     });
   };
 
-  // modificação.
+  addToCart = ({ target }) => {
+    const { fetchCategoriesData } = this.state;
+    const productFiltered = fetchCategoriesData
+      .filter((product) => product.id === target.id);
+    this.setState((prevState) => ({
+      itemByCategoriesArray: [...prevState.itemByCategoriesArray, ...productFiltered],
+    }), () => {
+      const { itemByCategoriesArray } = this.state;
+      localStorage
+        .setItem('cartArray', JSON.stringify(itemByCategoriesArray));
+    });
+  };
 
   render() {
     const { categories, fetchCategoriesData } = this.state;
+    const { history } = this.props;
     return (
       <section>
         <Header />
@@ -67,8 +78,8 @@ export default class Home extends Component {
               ))
             }
           </div>
-          <main>
-            <div className="main-container">
+          <main className="main-container">
+            <div className="main-content">
               <h1
                 data-testid="home-initial-message"
               >
@@ -76,7 +87,7 @@ export default class Home extends Component {
               </h1>
             </div>
             <div />
-            <QueryProduct getProps={ this.props } />
+            <QueryProduct />
             { fetchCategoriesData.map((itemByCategory) => (
               <div key={ itemByCategory.id }>
                 <Link
@@ -91,19 +102,34 @@ export default class Home extends Component {
                 >
                   {itemByCategory.title}
                 </p>
+                <button
+                  id={ itemByCategory.id }
+                  data-testid="product-add-to-cart"
+                  onClick={ this.addToCart }
+                >
+                  Adicionar ao carrinho
 
+                </button>
               </div>
             )) }
           </main>
-          <Link
-            className="cart-btn"
-            to="/shoppingcart"
-            data-testid="shopping-cart-button"
-          >
-            Carrinho de compras
-          </Link>
+          <aside className="shopping-cart">
+            <button
+              onClick={ () => history.push('/shoppingcart') }
+              className="cart-btn"
+              to="/shoppingcart"
+              data-testid="shopping-cart-button"
+            >
+              Carrinho de compras
+            </button>
+            <ShoppingCart />
+          </aside>
         </section>
       </section>
     );
   }
 }
+
+Home.propTypes = {
+  history: PropTypes.shape().isRequired,
+};

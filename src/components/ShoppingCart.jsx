@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../styles/shoppingcart.css';
 
 export default class ShoppingCart extends Component {
   state = {

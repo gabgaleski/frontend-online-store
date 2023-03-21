@@ -49,6 +49,11 @@ export class ProductDetails extends React.Component {
 }
 
 ProductDetails.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  match: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  history: PropTypes.shape().isRequired,
+
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
 };

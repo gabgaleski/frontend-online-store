@@ -1,0 +1,24 @@
+.product-table {
+  background-color: rgb(253, 237, 240);
+  display: flex;
+  flex-flow: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.singleProduct-table {
+  align-items: center;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  justify-content: space-between;
+  margin: 1px;
+  width: 200px;
+}
+
+.img-product {
+  width: 100px;
+}

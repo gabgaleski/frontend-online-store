@@ -40,7 +40,7 @@ export class ProductDetails extends React.Component {
           onClick={ this.changePage }
           data-testid="shopping-cart-button"
         >
-          Adicionar no carrinho
+          Ir para o carrinho
 
         </button>
       </div>

@@ -5,6 +5,7 @@ import { getProductById } from '../services/api';
 export class ProductDetails extends React.Component {
   state = {
     productsObj: {},
+    arrayObj: [],
   };
 
   componentDidMount() {
@@ -21,6 +22,16 @@ export class ProductDetails extends React.Component {
     const getProducts = await getProductById(id);
     this.setState({
       productsObj: getProducts,
+    });
+  };
+
+  addProduct = () => {
+    const { productsObj } = this.state;
+    this.setState((prevState) => ({
+      arrayObj: [...prevState.arrayObj, productsObj],
+    }), () => {
+      const { arrayObj } = this.state;
+      localStorage.setItem('detailsItem', JSON.stringify(arrayObj));
     });
   };
 
@@ -41,6 +52,13 @@ export class ProductDetails extends React.Component {
           data-testid="shopping-cart-button"
         >
           Ir para o carrinho
+
+        </button>
+        <button
+          onClick={ this.addProduct }
+          data-testid="product-detail-add-to-cart"
+        >
+          Adicionar ao carrinho
 
         </button>
       </div>

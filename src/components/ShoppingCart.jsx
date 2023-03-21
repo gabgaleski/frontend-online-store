@@ -10,10 +10,14 @@ export default class ShoppingCart extends Component {
     if (!JSON.parse(localStorage.getItem('cartArray'))) {
       localStorage.setItem('cartArray', JSON.stringify([]));
     }
+    if (!JSON.parse(localStorage.getItem('detailsItem'))) {
+      localStorage.setItem('detailsItem', JSON.stringify([]));
+    }
     const cartArray = JSON.parse(localStorage.getItem('cartArray'));
+    const itensDetails = JSON.parse(localStorage.getItem('detailsItem'));
     this.setState((prevState) => ({
-      cartArrayTotal: [...prevState.cartArrayTotal, ...cartArray],
-      quantity: cartArray.length,
+      cartArrayTotal: [...prevState.cartArrayTotal, ...cartArray, ...itensDetails],
+      quantity: (cartArray.length + itensDetails.length),
     }));
   }
 

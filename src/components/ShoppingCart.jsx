@@ -13,6 +13,7 @@ export default class ShoppingCart extends Component {
     const cartArray = JSON.parse(localStorage.getItem('cartArray'));
     this.setState((prevState) => ({
       cartArrayTotal: [...prevState.cartArrayTotal, ...cartArray],
+      quantity: cartArray.length,
     }));
   }
 

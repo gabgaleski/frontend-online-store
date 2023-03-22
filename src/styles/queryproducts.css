@@ -10,12 +10,12 @@
 
 .singleProduct-table {
   align-items: center;
-  border: 1px solid black;
+  background-color: rgb(238, 220, 220);
   display: flex;
   flex-direction: column;
-  height: 300px;
   justify-content: space-between;
-  margin: 1px;
+  height: 250px;
+  margin: 5px;
   width: 200px;
 }
 

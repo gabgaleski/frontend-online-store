@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
+import Avaliation from './Avaliation';
 
 export class ProductDetails extends React.Component {
   state = {
@@ -36,6 +37,7 @@ export class ProductDetails extends React.Component {
   };
 
   render() {
+    const { match: { params: { id } } } = this.props;
     const { productsObj } = this.state;
     const { title, thumbnail, price } = productsObj;
     return (
@@ -61,6 +63,7 @@ export class ProductDetails extends React.Component {
           Adicionar ao carrinho
 
         </button>
+        <Avaliation id={ id } />
       </div>
     );
   }

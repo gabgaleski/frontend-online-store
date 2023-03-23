@@ -38,6 +38,7 @@ class QueryProduct extends React.Component {
     });
   };
 
+  // alteração
   render() {
     const { inputValue, productsArray } = this.state;
     return (

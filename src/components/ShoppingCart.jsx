@@ -4,7 +4,7 @@ import '../styles/shoppingcart.css';
 export default class ShoppingCart extends Component {
   state = {
     cartArrayTotal: [],
-    quantity: 0,
+    finalCartArray: [],
   };
 
   componentDidMount() {
@@ -20,41 +20,67 @@ export default class ShoppingCart extends Component {
 
     this.setState((prevState) => ({
       cartArrayTotal: [...prevState.cartArrayTotal, ...cartArray],
-    }));
+    }), this.newCart);
   };
 
-  handleDelete = (index) => {
+  newCart = () => {
+    this.setState({ finalCartArray: [] });
+    // const cartArray = JSON.parse(localStorage.getItem('cartArray'));
     const { cartArrayTotal } = this.state;
-    const cartTotalCPY = cartArrayTotal.slice();
-    cartTotalCPY.splice(index, 1);
-    this.setState({ cartArrayTotal: cartTotalCPY });
-  };
+    const idArray = cartArrayTotal.map(({ id }) => id);
+    const idArrayReduced = [...new Set(idArray)];
+    idArrayReduced.forEach((id) => {
+      const product = cartArrayTotal.filter((item) => item.id === id);
 
-  handleClickPlus = () => {
-    const { quantity } = this.state;
-    let quantityCPY = quantity;
-    quantityCPY += 1;
-    this.setState({
-      quantity: quantityCPY,
+      console.log(product, product.length);
+
+      this.setState((prevState) => ({
+        finalCartArray: [...prevState.finalCartArray,
+          {
+            product: product[0],
+            quantity: product.length,
+          }],
+      }));
     });
   };
 
-  handleClickMinus = () => {
-    const { quantity } = this.state;
-    let quantityCPY = quantity;
-    quantityCPY -= 1;
-    this.setState({
-      quantity: quantityCPY,
-    });
+  handleDelete = (productId) => {
+    const { cartArrayTotal } = this.state;
+    const cartTotalCPY = cartArrayTotal.filter(({ id }) => id !== productId);
+    this.setState({ cartArrayTotal: cartTotalCPY }, this.localStorageRefresh);
+  };
+
+  handleClickPlus = (product) => {
+    this.setState((prevState) => ({
+      cartArrayTotal: [...prevState.cartArrayTotal, product],
+    }), this.localStorageRefresh);
+  };
+
+  localStorageRefresh = () => {
+    const { cartArrayTotal } = this.state;
+    localStorage.setItem('cartArray', JSON.stringify(cartArrayTotal));
+    this.newCart();
+  };
+
+  handleClickMinus = (productId, quantity) => {
+    if (quantity === 1) return;
+    const { cartArrayTotal } = this.state;
+    const cartArrayIds = cartArrayTotal.map(({ id }) => id);
+    const finalPosition = cartArrayIds.lastIndexOf(productId);
+    const cartTotalCPY = cartArrayTotal
+      .filter((_product, index) => index !== finalPosition);
+    this.setState({ cartArrayTotal: cartTotalCPY }, this.localStorageRefresh);
   };
 
   render() {
-    const { cartArrayTotal, quantity } = this.state;
+    const { finalCartArray } = this.state;
     return (
       <ul>
-        <h1 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h1>
-        {cartArrayTotal
-          .map((product, index) => (
+        { !finalCartArray.length && (
+          <h1 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h1>
+        )}
+        {finalCartArray
+          .map(({ product, quantity }, index) => (
             <li
               className="cart-item-container"
               key={ index }
@@ -69,13 +95,13 @@ export default class ShoppingCart extends Component {
               <div className="cart-item">
                 <button
                   data-testid="remove-product"
-                  onClick={ () => this.handleDelete(index) }
+                  onClick={ () => this.handleDelete(product.id) }
                 >
                   X
                 </button>
                 <button
                   data-testid="product-decrease-quantity"
-                  onClick={ this.handleClickMinus }
+                  onClick={ () => this.handleClickMinus(product.id, quantity) }
                 >
                   -
                 </button>
@@ -88,7 +114,7 @@ export default class ShoppingCart extends Component {
                 </p>
                 <button
                   data-testid="product-increase-quantity"
-                  onClick={ this.handleClickPlus }
+                  onClick={ () => this.handleClickPlus(product) }
                 >
                   +
                 </button>

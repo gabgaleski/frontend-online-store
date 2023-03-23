@@ -111,6 +111,9 @@ export default class Home extends Component {
                   >
                     {itemByCategory.title}
                   </p>
+                  {itemByCategory.shipping.free_shipping && (
+                    <p data-testid="free-shipping">Frete grátis</p>
+                  )}
                   <button
                     id={ itemByCategory.id }
                     data-testid="product-add-to-cart"

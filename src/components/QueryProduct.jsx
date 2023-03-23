@@ -24,15 +24,23 @@ class QueryProduct extends React.Component {
     });
   };
 
-  addToCart = ({ target }) => {
+  addToCart = (productId) => {
     const { productsArray } = this.state;
     const productFiltered = productsArray
-      .filter((product) => product.id === target.id);
+      .find((product) => product.id === productId);
+
+    const objProduct = { product: productFiltered, quantity: 1 };
     this.setState((prevState) => ({
-      cartArray: [...prevState.cartArray, ...productFiltered],
+      cartArray: [...prevState.cartArray, objProduct],
     }), () => {
+      console.log(objProduct.product.id);
       const { cartArray } = this.state;
       localStorage.setItem('cartArray', JSON.stringify(cartArray));
+      const repeated = cartArray
+        .find((item) => item.product.id === objProduct.product.id);
+      if (repeated) {
+        objProduct.quantity += 1;
+      }
     });
   };
 
@@ -79,9 +87,8 @@ class QueryProduct extends React.Component {
                     Detail
                   </Link>
                   <button
-                    id={ product.id }
                     data-testid="product-add-to-cart"
-                    onClick={ this.addToCart }
+                    onClick={ () => this.addToCart(product.id) }
                   >
                     Adicionar ao carrinho
 

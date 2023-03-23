@@ -31,7 +31,7 @@ export class ProductDetails extends React.Component {
       arrayObj: [...prevState.arrayObj, productsObj],
     }), () => {
       const { arrayObj } = this.state;
-      localStorage.setItem('detailsItem', JSON.stringify(arrayObj));
+      localStorage.setItem('cartArray', JSON.stringify(arrayObj)); // localStorage.setItem('detailsItem', JSON.stringify(arrayObj));
     });
   };
 

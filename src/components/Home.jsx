@@ -65,8 +65,13 @@ export default class Home extends Component {
             {
               categories.map((category) => (
                 <div key={ category.id }>
-                  <label data-testid="category" htmlFor={ category.id }>
+                  <label
+                    className="individual-category"
+                    data-testid="category"
+                    htmlFor={ category.id }
+                  >
                     <input
+                      className="individual-category"
                       name="select-radio"
                       type="radio"
                       id={ category.id }
@@ -88,30 +93,35 @@ export default class Home extends Component {
             </div>
             <div />
             <QueryProduct />
-            { fetchCategoriesData.map((itemByCategory) => (
-              <div key={ itemByCategory.id }>
-                <Link
-                  data-testid="product-detail-link"
-                  to={ `/productdetails/${itemByCategory.id}` }
-                >
-                  Detail
-                </Link>
-                <p
-                  data-testid="product"
+            <div className="main-categories-container">
+              { fetchCategoriesData.map((itemByCategory) => (
+                <div
+                  className="main-categories-products"
                   key={ itemByCategory.id }
                 >
-                  {itemByCategory.title}
-                </p>
-                <button
-                  id={ itemByCategory.id }
-                  data-testid="product-add-to-cart"
-                  onClick={ this.addToCart }
-                >
-                  Adicionar ao carrinho
+                  <Link
+                    data-testid="product-detail-link"
+                    to={ `/productdetails/${itemByCategory.id}` }
+                  >
+                    Detail
+                  </Link>
+                  <p
+                    data-testid="product"
+                    key={ itemByCategory.id }
+                  >
+                    {itemByCategory.title}
+                  </p>
+                  <button
+                    id={ itemByCategory.id }
+                    data-testid="product-add-to-cart"
+                    onClick={ this.addToCart }
+                  >
+                    Adicionar ao carrinho
 
-                </button>
-              </div>
-            )) }
+                  </button>
+                </div>
+              )) }
+            </div>
           </main>
           <aside className="shopping-cart">
             <button

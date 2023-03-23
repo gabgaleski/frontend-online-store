@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../styles/shoppingcart.css';
 
 export default class ShoppingCart extends Component {
   state = {
@@ -7,35 +8,94 @@ export default class ShoppingCart extends Component {
   };
 
   componentDidMount() {
+    this.updateShoppingCart();
+  }
+
+  // experimentar um estado para repetidos e um estado para itens diferentes
+  updateShoppingCart = () => {
     if (!JSON.parse(localStorage.getItem('cartArray'))) {
       localStorage.setItem('cartArray', JSON.stringify([]));
     }
-    if (!JSON.parse(localStorage.getItem('detailsItem'))) {
-      localStorage.setItem('detailsItem', JSON.stringify([]));
-    }
     const cartArray = JSON.parse(localStorage.getItem('cartArray'));
-    const itensDetails = JSON.parse(localStorage.getItem('detailsItem'));
+
     this.setState((prevState) => ({
-      cartArrayTotal: [...prevState.cartArrayTotal, ...cartArray, ...itensDetails],
-      quantity: (cartArray.length + itensDetails.length),
+      cartArrayTotal: [...prevState.cartArrayTotal, ...cartArray],
     }));
-  }
+  };
+
+  handleDelete = (index) => {
+    const { cartArrayTotal } = this.state;
+    const cartTotalCPY = cartArrayTotal.slice();
+    cartTotalCPY.splice(index, 1);
+    this.setState({ cartArrayTotal: cartTotalCPY });
+  };
+
+  handleClickPlus = () => {
+    const { quantity } = this.state;
+    let quantityCPY = quantity;
+    quantityCPY += 1;
+    this.setState({
+      quantity: quantityCPY,
+    });
+  };
+
+  handleClickMinus = () => {
+    const { quantity } = this.state;
+    let quantityCPY = quantity;
+    quantityCPY -= 1;
+    this.setState({
+      quantity: quantityCPY,
+    });
+  };
 
   render() {
     const { cartArrayTotal, quantity } = this.state;
     return (
-      <div>
+      <ul>
         <h1 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h1>
         {cartArrayTotal
           .map((product, index) => (
-            <div
+            <li
+              className="cart-item-container"
               key={ index }
             >
               <p data-testid="shopping-cart-product-name">{product.title}</p>
-              <p data-testid="shopping-cart-product-quantity">{ quantity }</p>
-            </div>
+              <p>
+                Preço:
+                {' '}
+                R$
+                {product.price}
+              </p>
+              <div className="cart-item">
+                <button
+                  data-testid="remove-product"
+                  onClick={ () => this.handleDelete(index) }
+                >
+                  X
+                </button>
+                <button
+                  data-testid="product-decrease-quantity"
+                  onClick={ this.handleClickMinus }
+                >
+                  -
+                </button>
+                <p
+                  data-testid="shopping-cart-product-quantity"
+                >
+                  Quantidade:
+                  {' '}
+                  { quantity }
+                </p>
+                <button
+                  data-testid="product-increase-quantity"
+                  onClick={ this.handleClickPlus }
+                >
+                  +
+                </button>
+              </div>
+            </li>
           ))}
-      </div>
+      </ul>
     );
   }
 }

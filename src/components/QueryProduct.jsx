@@ -10,6 +10,11 @@ class QueryProduct extends React.Component {
     cartArray: [],
   };
 
+  componentDidMount() {
+    const cartArray = JSON.parse(localStorage.getItem('cartArray'));
+    this.setState({ cartArray });
+  }
+
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({
@@ -25,22 +30,11 @@ class QueryProduct extends React.Component {
   };
 
   addToCart = (productId) => {
-    const { productsArray } = this.state;
-    const productFiltered = productsArray
-      .find((product) => product.id === productId);
-
-    const objProduct = { product: productFiltered, quantity: 1 };
     this.setState((prevState) => ({
-      cartArray: [...prevState.cartArray, objProduct],
+      cartArray: [...prevState.cartArray, productId],
     }), () => {
-      console.log(objProduct.product.id);
       const { cartArray } = this.state;
       localStorage.setItem('cartArray', JSON.stringify(cartArray));
-      const repeated = cartArray
-        .find((item) => item.product.id === objProduct.product.id);
-      if (repeated) {
-        objProduct.quantity += 1;
-      }
     });
   };
 
@@ -80,6 +74,9 @@ class QueryProduct extends React.Component {
                     alt={ product.title }
                   />
                   <p>{ product.price }</p>
+                  {product.shipping.free_shipping && (
+                    <p data-testid="free-shipping">Frete grátis</p>
+                  )}
                   <Link
                     data-testid="product-detail-link"
                     to={ `/productdetails/${product.id}` }
@@ -88,7 +85,7 @@ class QueryProduct extends React.Component {
                   </Link>
                   <button
                     data-testid="product-add-to-cart"
-                    onClick={ () => this.addToCart(product.id) }
+                    onClick={ () => this.addToCart(product) }
                   >
                     Adicionar ao carrinho
 
